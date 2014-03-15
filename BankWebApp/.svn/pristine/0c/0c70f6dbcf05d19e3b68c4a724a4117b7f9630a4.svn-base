@@ -1,0 +1,48 @@
+<%@ include file="layout/header.jsp" %>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>View Transaction</title>
+</head>
+<body>
+	<form method="post" action="../../issbank/trans">
+		<div id="content-client">
+			<h1>Transaction Enquiry</h1>
+			<table style="border:1px outset black;" cellpadding="10">
+<th>#</th>
+<th align="left"><fmt:message key="label.transaction.transactionId"/></th>
+<th align="left"><fmt:message key="label.transaction.accountId"/></th>
+<th align="left"><fmt:message key="label.transaction.transactionType"/></th>
+<th align="left"><fmt:message key="label.transaction.transactionAmount"/></th>
+<th align="left"><fmt:message key="label.transaction.depositToAccount"/></th>
+<th align="left"><fmt:message key="label.transaction.transactionTime"/></th>
+
+<c:forEach var="c" items="${FullTransList}" varStatus="status">
+				<tr class="${status.index%2==0?'even':'odd'}">
+					<td nowrap>${status.index + 1}</td>
+					<td nowrap>${c.transactionId}</td>
+					<td nowrap>${c.accountId}</td>
+					<td nowrap>${c.transactionType}</td>
+					<td nowrap>${c.transactionAmount}</td>
+					<td nowrap>${c.depositToAccount}</td>
+					<td nowrap>${c.transactionTime}</td>
+					</tr>
+					</c:forEach>
+</table>
+			<br><hr>
+			From:<input id="datepick1" size="50" name="FromDate"  /> 
+			
+			To:<input id="datepick2" size="50" name="ToDate" />
+			<p class="error">${error}</p>
+			<br>
+			<script type="text/javascript" src="<c:url value='/jscripts/datepickr.js'/>"></script>
+			<script type="text/javascript">
+				new datepickr('datepick1');
+			</script>
+			<script type="text/javascript">
+				new datepickr('datepick2');
+			</script>
+			<br>
+			<input type="submit" value="View Transaction">
+		</div>
+	</form>
+</body>

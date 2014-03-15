@@ -1,0 +1,76 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import sg.com.issbank.biz.AccountManager;
+import sg.com.issbank.biz.AdminManager;
+import sg.com.issbank.dto.BankAccount;
+import sg.com.issbank.dto.BankBranch;
+
+
+
+/**
+ * Servlet implementation class viewbalance
+ */
+@WebServlet("/balance")
+public class viewbalance extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	HttpSession session;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public viewbalance() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//response.getWriter().println("<b>hello</b>");
+		doProcess(request, response);
+	}
+
+	
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doProcess(request, response);		
+	}
+	
+	protected void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		session=request.getSession(true);
+		
+		String accid=(String) session.getAttribute("accountId");
+		AccountManager mgr=new AccountManager();
+		AdminManager adminMgr=new AdminManager();
+		
+		BankAccount bacc=new BankAccount();
+		bacc = mgr.getBalance(accid);
+		
+		request.setAttribute("accountId", accid);
+		request.setAttribute("Bank", bacc);
+		
+		BankBranch branch=adminMgr.findByBBID(bacc.getBBID());
+		request.setAttribute("branch", branch.getName()+" ("+branch.getBBID()+")");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("pages/client/viewBalance.jsp");
+		rd.forward(request,response);
+				
+	}
+
+}

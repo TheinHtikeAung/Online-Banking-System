@@ -1,0 +1,50 @@
+package sg.com.issbank.biz;
+import java.sql.Connection;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sg.com.issbank.dao.BankAccountDao;
+import sg.com.issbank.dao.DaoFactory;
+import sg.com.issbank.dto.BankAccount;
+
+public class AccountManager{
+	Connection conn;
+	
+	public BankAccount getBalance(String accountID)
+	{
+		//double balance=0;
+		BankAccount ba=new BankAccount();
+		DaoFactory factory=new DaoFactory();
+		BankAccountDao dao= factory.getbankaccountDAO();
+		try {
+			dao.openconnection();
+			ba=dao.getBalancebyAccID(accountID);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return ba;
+	}
+	
+	public ArrayList<BankAccount> findaccountbyCustID(String nric)
+	{
+		
+		DaoFactory factory=new DaoFactory();
+		BankAccountDao dao=factory.getbankaccountDAO();
+		
+		ArrayList<BankAccount> list=new ArrayList<BankAccount>();
+		try {
+			list = dao.findaccountbyCustID(nric);
+			System.out.println(list);
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	}
+

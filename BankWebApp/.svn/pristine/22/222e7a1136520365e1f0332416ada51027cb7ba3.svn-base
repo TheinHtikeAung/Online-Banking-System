@@ -1,0 +1,94 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sg.com.issbank.biz.AccountManager;
+import sg.com.issbank.dto.BankAccount;
+
+/**
+ * Servlet implementation class withdrawsuccess
+ */
+@WebServlet("/wsuccess")
+public class Withdrawresult extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public Withdrawresult() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		try {
+			doProcess(request,response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		try {
+			doProcess(request,response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void doProcess(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException, SQLException {
+		// TODO Auto-generated method stub
+		AccountManager mgr=new AccountManager();
+		BankAccount bacc=new BankAccount();
+		BigDecimal amount=new BigDecimal(request.getParameter("amount"));
+		int PIN  = Integer.parseInt(request.getParameter("pin"));
+		String Id=request.getParameter("accountId");
+		if(mgr.checkcustomer(Id,PIN))
+			{
+				if(mgr.withdraw(Id,amount)>0)
+				{
+					bacc = mgr.getBalance(Id);
+					request.setAttribute("Bank", bacc);
+					RequestDispatcher rd = request.getRequestDispatcher("successful.jsp");
+				rd.forward(request,response);
+				}
+				else
+				{
+					request.setAttribute("error","exceed amount of withdrawal!");
+					RequestDispatcher rd = request.getRequestDispatcher("withdraw.jsp");
+					rd.forward(request,response);
+				}
+			}
+			else
+			{
+				request.setAttribute("error","Wrong Pin Number!");
+				RequestDispatcher rd = request.getRequestDispatcher("withdraw.jsp");
+				rd.forward(request,response);
+			}
+		}
+		
+	}
+		
+	
+
+

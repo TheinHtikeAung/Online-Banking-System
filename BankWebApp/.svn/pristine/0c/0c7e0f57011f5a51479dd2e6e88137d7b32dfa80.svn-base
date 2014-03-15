@@ -1,0 +1,58 @@
+package sg.com.issbank.dao.mysql;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import sg.com.issbank.dao.CustomerDao;
+import sg.com.issbank.dto.Customer;
+
+public class CustomerDaoImpl implements CustomerDao {
+	
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet rs = null;
+	PreparedStatement ps=null;
+	
+	String query;
+	
+	@Override
+	public ArrayList<Customer> getCustomers() throws SQLException {
+		
+		ArrayList<Customer> customers=new ArrayList<Customer>();
+		query="select * from customer";
+		
+		connection=MySQL.getConnection();
+		statement = connection.createStatement();
+		rs = statement.executeQuery(query);
+		while (rs.next()) {
+			Customer c=new Customer(rs.getString(1));
+			customers.add(c);
+		}
+		close();
+		
+		return customers;
+	}
+	
+	public void close(){
+		try {
+			if (rs!=null) {
+				rs.close();
+			}
+			
+			if(statement!=null){
+				statement.close();
+			}
+			
+			if(connection!=null) {
+				connection.close();
+			}
+			
+		} catch (Exception e) {
+			
+		}
+	}
+}

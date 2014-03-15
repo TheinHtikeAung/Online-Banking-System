@@ -1,0 +1,15 @@
+<div id="content">			
+			<div id="content-left">
+			
+				<div id="menu">
+				<ul>
+					<li id="menuTitle"><fmt:message key="menu1"/></li>
+					<li><a href="#"><fmt:message key="menu.viewBalance"/></a></li>
+					<li><a href="#"><fmt:message key="menu.withdraw"/></a></li>
+					<li><a href="<c:url value='/pages/client/deposit.jsp'/>"><fmt:message key="menu.deposit"/></a></li>
+					<li><a href=""><fmt:message key="menu.fundTransfer"/></a></li>
+					<li><a href="<c:url value='/trans'/>"><fmt:message key="menu.transList"/></a></li>					
+				</ul>
+				</div>
+				
+			</div>

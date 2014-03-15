@@ -1,0 +1,184 @@
+package sg.com.issbank.dao.mysql;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import sg.com.issbank.dao.TransactionDao;
+import sg.com.issbank.dto.Customer;
+import sg.com.issbank.dto.Transaction;
+import java.util.Date;
+import java.sql.DriverManager;
+import java.sql.Timestamp;
+
+
+
+public class TransactionDaoImpl implements TransactionDao {
+
+
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet rs = null;
+	PreparedStatement ps=null;
+	
+	String query,error;
+	
+	@Override
+	public ArrayList<Transaction> findTransactionByAccountId(String accountId) {
+		ArrayList<Transaction> transactions=new ArrayList<Transaction>();
+	
+		query="select * from transaction where accountId='"+accountId+"'";
+		
+		connection=MySQL.getConnection();
+		
+		try {
+			
+			statement = connection.createStatement();
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"Executing retrieve: " + query);
+			rs = statement.executeQuery(query);
+			
+			while (rs.next()) {
+				Transaction tran=new Transaction(rs.getInt(1), rs.getString(2), rs.getString(3),rs.getDouble(4), rs.getString(5), rs.getTimestamp(6));
+				transactions.add(tran);
+			}
+			
+		}catch (SQLException e) {
+			error="Error in Retrieve :" + e;
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, error);
+		}finally{
+			close();
+		}
+		
+		return transactions;
+	}
+	
+	public void close(){
+		try {
+			if (rs!=null) {
+				rs.close();
+			}
+			
+			if(statement!=null){
+				statement.close();
+			}
+			
+			if(connection!=null) {
+				connection.close();
+			}
+			
+		} catch (Exception e) {
+			
+		}
+	}
+		
+	@Override
+	//Create a transaction object with the data you have and pass here!
+	public int insertTransaction(Transaction transaction) {
+		int insert=0;
+		openConnection();
+		try {
+			ps=connection.prepareStatement("insert into transaction(accountId,transactionType,transactionAmount,depositToAccount,transactionTime) values(?,?,?,?,?)");
+			ps.setString(1,transaction.getAccountId());
+			ps.setString(2,transaction.getTransactionType());
+			ps.setDouble(3, transaction.getTransactionAmount());
+			ps.setString(4, transaction.getDepositToAccount());
+			ps.setTimestamp(5, transaction.getTransactionTime());
+			insert=ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		closeConnection();
+		return insert;
+	}
+
+	@Override
+	public ArrayList<Transaction> getTransactionByDate(Date from, Date to) {
+		openConnection();
+		ArrayList<Transaction> transList=new ArrayList<Transaction>();
+		System.out.println("from: "+new Timestamp(from.getTime()));
+		System.out.println(" To: "+new Timestamp(to.getTime()));
+		System.out.println("from: "+from+" to: "+to);
+		try {
+			ps=connection.prepareStatement("select * from transaction where transactionTime between ? and ?");
+			ps.setTimestamp(1, new Timestamp(from.getTime()));
+			ps.setTimestamp(2, new Timestamp(to.getTime()));			
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()){
+				Transaction transaction = new Transaction(rs.getInt("transactionId"), rs.getString("accountId"), rs.getString("transactionType"), rs.getDouble("transactionAmount"), rs.getString("depositToAccount"), rs.getTimestamp("transactionTime"));
+				transList.add(transaction);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeConnection();
+		return transList;
+	}
+	
+	private void openConnection() {
+		// TODO Auto-generated method stub
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/team16", "root", "root");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void closeConnection() {
+		// TODO Auto-generated method stub
+		try {
+			connection.close();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public ArrayList<Transaction> getAllTransactions(String accId) {
+		openConnection();
+		ArrayList<Transaction> transList=new ArrayList<Transaction>();
+		
+		try {
+			ps=connection.prepareStatement("select * from transaction where accountId=?");
+			ps.setString(1, accId);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()){
+				Transaction transaction = new Transaction(rs.getInt("transactionId"), rs.getString("accountId"), rs.getString("transactionType"), rs.getDouble("transactionAmount"), rs.getString("depositToAccount"), rs.getTimestamp("transactionTime"));
+				transList.add(transaction);
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*for(Transaction t:transList){
+			System.out.println(t.toString());
+		}*/
+		
+		closeConnection();
+		return transList;
+	}
+}
+
+
+	
+
+

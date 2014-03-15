@@ -1,0 +1,41 @@
+package sg.com.issbank.biz;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+
+import sg.com.issbank.dao.BankAccountDao;
+import sg.com.issbank.dao.BankAccountDetailDao;
+import sg.com.issbank.dao.BankBranchDao;
+import sg.com.issbank.dao.CustomerDao;
+import sg.com.issbank.dao.mysql.CustomerDaoImpl;
+import sg.com.issbank.dto.Customer;
+
+public class AdminManager {
+	/*private BankAccountDao bankAccDAO;
+	private BankAccountDetailDao bankAccDetailDAO;
+	private BankBranchDao bankBranchDAO;*/
+	private CustomerDao customerDAO;
+
+	public AdminManager() {
+		this.customerDAO = new CustomerDaoImpl();
+	}
+	
+	public ArrayList<Customer> getCustomers(){
+		ArrayList<Customer> customers=new ArrayList<Customer>();
+		customers=customerDAO.getCustomers();
+		
+		return customers;
+	}
+	
+	public void insertCustomer(Customer c) {
+    		customerDAO.insertCustomer(c);
+    }
+	
+	public void updateCustomer(Customer c) {
+		customerDAO.updateCustomer(c);
+}
+	
+	
+
+}

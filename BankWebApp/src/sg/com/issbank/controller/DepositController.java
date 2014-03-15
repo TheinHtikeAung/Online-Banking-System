@@ -1,0 +1,69 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import sg.com.issbank.biz.DepositManager;
+import sg.com.issbank.dto.Customer;
+
+/**
+ * Servlet implementation class DepositController
+ */
+@WebServlet("/deposit")
+public class DepositController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	HttpSession session;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DepositController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		session=request.getSession(true);
+		String amount=request.getParameter("amount");
+		String pin=request.getParameter("pin");
+		DepositManager mgr=new DepositManager();
+		RequestDispatcher dispatcher=null;
+		//should pass user id; it is hard coded for now
+		
+		String accountId=(String) session.getAttribute("accountId");
+		
+		if(mgr.DepositAmountByAccountId(accountId, pin,amount)){
+			String msg = "Deposit Successfull!!";
+			request.setAttribute("success", msg);
+			dispatcher=request.getRequestDispatcher("/pages/client/successMessage.jsp");
+			dispatcher.forward(request, response);
+		}
+		else{
+			String er = "Deposit not successfull... Invalid Pin!!";
+			request.setAttribute("error", er);
+			dispatcher = request
+					.getRequestDispatcher("/pages/client/deposit.jsp");
+			dispatcher.forward(request, response);
+		}
+		
+		
+	}
+
+}

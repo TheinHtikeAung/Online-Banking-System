@@ -1,0 +1,20 @@
+package sg.com.issbank.dto;
+
+public class BankAccountDetail {
+
+	private String nric;
+	private String accountId;
+	public String getNric() {
+		return nric;
+	}
+	public void setNric(String nric) {
+		this.nric = nric;
+	}
+	public String getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	
+}

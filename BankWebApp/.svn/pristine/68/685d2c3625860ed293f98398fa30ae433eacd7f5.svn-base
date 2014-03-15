@@ -1,0 +1,125 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import sg.com.issbank.biz.AccountManager;
+import sg.com.issbank.dao.BankAccountDao;
+import sg.com.issbank.dao.DaoFactory;
+import sg.com.issbank.dao.TransactionDao;
+import sg.com.issbank.dto.Transaction;
+import sg.com.issbank.exception.BelowMinimumBalanceException;
+import sg.com.issbank.exception.OverDraftLimitExceededException;
+
+/**
+ * Servlet implementation class FrontController
+ */
+@WebServlet(description = "For Web App FrontEnd", urlPatterns = { "/Testing" })
+public class FrontController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String folderPath="/pages/client/";
+	private HttpSession session;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FrontController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		processRequest(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		processRequest(request, response);
+	}
+	
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		// TODO: Withdraw Algorithm
+		/*Withdraw Test Code*/
+			AccountManager mgr=new AccountManager();
+		
+			String accountId="1111"; //will get from session
+			String accountType="Checking Account";  //will get from parameter
+			double withdrawAmt=Double.parseDouble(request.getParameter("amount"));
+			
+			if(accountType.equalsIgnoreCase("Checking Account")){
+				
+				if(withdrawAmt<=mgr.getMaximumBalanceForCheckingAccount(accountId)){
+					
+					/*BankAccountDao bankDao = DaoFactory.getbankaccountDAO();
+					bankDao.deposit(accountId, depositAmount);
+					
+					TransactionDao transactionDao=DaoFactory.getTransactionDao();
+					Transaction transaction=new Transaction(12,accountId,"Deposit",depositAmount,accountId, currentTimeStamp);
+					transactionDao.insertTransaction(transaction);*/
+					
+				}else{
+					
+					request.setAttribute("error", "Withdraw amount is over account overdraft limit !");
+					throw new OverDraftLimitExceededException("Testing");
+				}
+				
+			}else{
+				
+				if(withdrawAmt<=mgr.getMaximumBalanceForSavingAccount(accountId)){
+					
+					
+				}else{
+					
+					request.setAttribute("error", "Withdraw amount is minimum balance limit !");
+					throw new BelowMinimumBalanceException("Testing");
+				}
+				
+			}
+			
+					
+		
+		/*Withdraw Test Code*/
+		
+		String userPath = request.getServletPath();
+		
+		PrintWriter out=response.getWriter();
+		out.print(userPath+"Testing");
+		
+		/*forward(userPath, request, response);*/
+	}
+	
+	private void forward(String userPath,HttpServletRequest request, HttpServletResponse response){
+		try {
+            String url=folderPath+userPath; 
+			
+			request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+	}
+	
+	private String getURL(String url){
+		String[] requestURL=url.split("/");
+		
+		if(requestURL.length==3){ 
+			return requestURL[2];
+		}
+		else{ 
+			return requestURL[3];
+		}
+	}
+}

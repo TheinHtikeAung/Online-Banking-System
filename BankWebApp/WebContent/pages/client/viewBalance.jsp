@@ -1,0 +1,54 @@
+<%@page import="sg.com.issbank.dto.BankAccount"%>
+<jsp:useBean id="checkAcc" class="sg.com.issbank.dao.mysql.CheckingAccountDaoImpl" scope="page"/>
+<jsp:useBean id="saveAcc" class="sg.com.issbank.dao.mysql.SavingsAccountDaoImpl" scope="page"/>
+
+<%@ include file="layout/header.jsp" %>
+<%@ include file="layout/menu.jsp" %>
+
+	<div id="content-admin-main" class="formatView-table">
+	
+	<h1 id="admin-title"><fmt:message key="admin.bankaccount"/></h1>
+	
+		<table class="info-table">
+			<th colspan="2"><fmt:message key="label.accountManager.AccountDetail"/></th>
+		
+			<tr>
+				<td style="width: 150px;">AccountID : </td>
+				<td>${Bank.accountId}</td>
+			</tr>
+			<tr>
+				<td>AccountType : </td>
+				<td>${Bank.accountType}</td>
+			</tr>
+			
+			<c:if test="${Bank.accountType=='Saving Account'}">
+			<tr>
+				<td><fmt:message key="label.account.minBalance"/> : </td>
+				<td><%=saveAcc.findSavingAccount((String)request.getAttribute("accountId")).getMinimumBalance()%>
+				
+				</td>
+			</tr>
+				
+			</c:if>
+			<c:if test="${Bank.accountType=='Checking Account'}">
+			<tr>
+				<td><fmt:message key="label.account.overdraft"/> : </td>
+				<td><%=checkAcc.findCheckingAccount((String)request.getAttribute("accountId")).getOverDraftAmount()%></td>
+			</tr>
+			</c:if>
+			
+			<tr>
+				<td>Balance : </td>
+				<td>${Bank.balance}</td>
+			</tr>
+			
+			<tr>
+				<td><fmt:message key="label.account.bbid"/> : </td>
+				<td>${branch}</td>
+			</tr>
+		</table>
+		
+		</div>
+	</div>
+	
+<%@ include file="layout/footer.jsp" %>

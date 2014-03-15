@@ -1,0 +1,104 @@
+package sg.com.issbank.controller;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
+import sg.com.issbank.exception.OverDraftLimitExceededException;
+
+import javax.servlet.RequestDispatcher;
+
+import sg.com.issbank.biz.CustomerManager;
+import sg.com.issbank.dao.mysql.MySQL;
+
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	HttpSession session;
+    
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+
+    public LoginServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		session=request.getSession(true);
+		session.invalidate();
+		
+		response.sendRedirect("pages/client/index.jsp");
+		
+		/*throw new OverDraftLimitExceededException();*/
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String path;
+		String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+		System.out.println("id:"+id+"  pwd:"+pwd);
+		
+		boolean result = false;
+		//Create DAO
+		try{
+		Connection con = MySQL.getConnection();
+	//	System.out.println("Connection check:"+con);
+		PreparedStatement ps = con.prepareStatement("select * from customer where userid=? and password = ?");
+		ps.setString(1,id.trim());
+		ps.setString(2, pwd.trim());
+		ResultSet rs = ps.executeQuery();
+		System.out.println("RS check:"+rs);
+		
+		while(rs.next()){
+			System.out.println(rs.getString(1));
+			System.out.println(rs.getString(2));
+			result= true;
+		}
+				
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		String name=request.getParameter("id");
+		String password=request.getParameter("pwd");
+		CustomerManager mgr=new CustomerManager();
+		mgr.getCustomerById(name,password);
+		if(result){
+		path="/home.jsp";
+		request.setAttribute("message","Welcome to Bank");
+		}else{
+		path="/Login.jsp";
+		request.setAttribute("message","invalid user name and password");
+
+		}
+		
+		
+//		AuthenticateManager am = new AuthenticateManager();
+//		boolean b = false;
+//		try {
+//			b = am.authenticateUser(id, pwd);
+//		} catch (DataException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		if (b) { path="/success.jsp"; }
+//		else  {path="/error.jsp"; }
+		RequestDispatcher rd = request.getRequestDispatcher(path);	
+		 rd.forward(request, response);
+		
+	}
+
+}
+
+
+

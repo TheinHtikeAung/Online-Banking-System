@@ -1,0 +1,32 @@
+<%@ include file="layout/header.jsp" %>
+<%@ include file="layout/menu.jsp" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<link href="<c:url value='../css/style.css'/>" rel="stylesheet" media="screen">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Deposit</title>
+</head>
+<body>
+<h1>Deposit</h1>
+<form id="deposit-content" method="post" action="../../deposit">
+<table>
+<tr>
+<td>Enter the amount to deposit:</td> 
+<td> <input type="text" name="amount"/></td>
+</tr>
+<tr>
+<td>Enter Pin:</td>
+<td> <input type="text" name="pin"/><br>
+<td class="error"> ${error}</td>
+</tr>
+<tr>
+<td></td>
+<td> <input type="submit" value="Deposit"/></td>
+</tr>
+</table>
+
+</form>
+
+</body>
+<%@ include file="layout/footer.jsp" %>

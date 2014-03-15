@@ -1,0 +1,16 @@
+package sg.com.issbank.biz;
+
+import java.util.ArrayList;
+
+import sg.com.issbank.dto.Customer;
+
+public class CustomerManager {
+
+	public ArrayList<Customer> getCustomerById(String name, String password) {
+		
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
+}

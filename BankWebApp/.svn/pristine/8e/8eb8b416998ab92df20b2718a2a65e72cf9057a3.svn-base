@@ -1,0 +1,16 @@
+<html>
+ <head>
+  
+ </head>
+ <body>
+ <script type="text/javascript">
+ function enterKey(e)
+	{
+		/*  if (e.keyCode == 13) { */
+			alert("You pressed a key inside the input field");
+		 }/*  */
+	}
+  	</script>
+ <input type="text" name="accountId" onkeypress="enterKey(event)" size=15 maxlength=20>
+</body>
+</html>

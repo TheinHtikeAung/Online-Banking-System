@@ -1,0 +1,133 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sg.com.issbank.biz.AdminManager;
+import sg.com.issbank.dto.Customer;
+import sg.com.issbank.util.Kitool;
+
+/**
+ * Servlet implementation class AdminController
+ */
+@WebServlet(description = "For Web App Backend", urlPatterns = { "/admin/*" })
+public class AdminController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String folderPath="/pages/admin/";
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public AdminController() {
+        super();
+
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String userPath = getURL(request.getRequestURI().toString());
+		AdminManager mgr=new AdminManager();
+		
+		PrintWriter out=response.getWriter();
+		out.println(request.getParameter("d"));
+		
+		out.println(userPath);
+		
+		if (userPath.equals("customerMaintenance") || userPath.equals("admin")) {
+			
+			request.setAttribute("customers", mgr.getCustomers());
+			userPath="customerMaintenance.jsp";
+		
+		}else if (userPath.equals("deleteCustomer")){
+			
+			
+		}
+		
+		/*else{
+			request.setAttribute("customers", mgr.getCustomers());
+			userPath="customerMaintenance.jsp";
+		}*/
+		
+		forward(userPath, request, response);		
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String userPath = getURL(request.getRequestURI().toString());
+		AdminManager mgr=new AdminManager();
+
+		PrintWriter out=response.getWriter();
+		out.println(request.getParameter("d"));
+		
+		out.println(userPath);
+		
+		if (userPath.equals("customerProcess")) {
+			
+			Customer c=new Customer(request.getParameter("nric"),
+					request.getParameter("name"), request.getParameter("address"), 
+					Kitool.parseDate(request.getParameter("dateOfBirth")), 
+					request.getParameter("nationality"), 
+					request.getParameter("gender"),request.getParameter("userid"), 
+					request.getParameter("password"),
+					Kitool.parseDate(request.getParameter("dateOfJoining")));
+			
+			String insert=request.getParameter("insert");
+			
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"Customer Insert Flag: "+ insert);
+			
+			if(insert.equalsIgnoreCase("true")){
+				mgr.insertCustomer(c);
+			}else{
+				mgr.updateCustomer(c);
+			}
+			
+			request.setAttribute("customers", mgr.getCustomers());
+			userPath="customerMaintenance.jsp";
+		}
+		
+		forward(userPath, request, response);
+	}
+	
+	/*private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		String userPath = request.getServletPath();
+		PrintWriter out=response.getWriter();
+		
+		request.getRequestDispatcher("pages/admin/customerMaintenance.jsp").forward(request, response);
+	}*/
+	
+	private void forward(String userPath,HttpServletRequest request, HttpServletResponse response){
+		try {
+            String url=folderPath+userPath; 
+			
+			request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+	}
+	
+	private String getURL(String url){
+		String[] requestURL=url.split("/");
+		
+		if(requestURL.length==3){ 
+			return requestURL[2];
+		}
+		else{ 
+			return requestURL[3];
+		}
+	}
+
+}

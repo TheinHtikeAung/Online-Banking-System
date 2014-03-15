@@ -1,0 +1,51 @@
+title=ISS Bank
+title.admin=ISS Bank Admin Panel
+footer=Copyright © ISS Bank, 2013
+
+login.title=Login As : 
+logout=Log out
+
+menu1=Menu
+menu.transList=List Transaction
+menu.fundTransfer=Fund Transfer
+menu.viewBalance=View Balance
+menu.withdraw=Withdraw
+menu.deposit=Deposit
+
+menu.admin=Maintenance
+menu.customer=Customer
+menu.bankbranch=Bank Branch
+menu.bankaccount=Bank Account
+menu.transaction=Transaction History
+
+admin.customerpanel=Customer Maintenance Panel
+admin.bankbrach=Bank Branch Panel
+admin.bankaccount=Bank Account Panel
+admin.trasaction=Transaction History Panel
+
+
+login=Login
+login.iBanking=ISS iBanking
+login.user=User ID : 
+login.password=Password :
+login.welcome=Welcome to ISS iBanking
+
+bank.storytitle=ISS Bank Story
+bank.story=ISS Bank Main Branch near Clementi on Singapore. Now we have 16 branches in Singapore. Founded by <b>Team16</b> on 16 May, 2013.</br></br></br>
+bank.readmore=Read More 
+
+label.customer.add=Add new customer
+label.customer.nric=NRIC
+label.customer.userid=User ID
+label.customer.name=Name
+label.customer.dob=Date of Birth
+label.customer.gender=Gender
+label.customer.address=Address
+label.customer.nationality=Nationality
+label.customer.join=Joined Date
+
+page.edit=Edit
+page.delete=Delete
+
+
+

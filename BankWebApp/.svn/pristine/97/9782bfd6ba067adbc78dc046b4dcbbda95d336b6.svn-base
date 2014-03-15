@@ -1,0 +1,88 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import sg.com.issbank.biz.AdminManager;
+
+/**
+ * Servlet implementation class AdminController
+ */
+@WebServlet(description = "For Web App Backend", urlPatterns = { "/admin/*" })
+public class AdminController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String folderPath="/pages/admin/";
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public AdminController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String userPath = getURL(request.getRequestURI().toString());
+		AdminManager mgr=new AdminManager();
+		
+		PrintWriter out=response.getWriter();
+		out.println(request.getParameter("d"));
+		
+		out.println(userPath);
+		
+		if (userPath.equals("customerMaintenance")) {
+			
+			request.setAttribute("customers", mgr.getCustomers());
+			userPath="customerMaintenance.jsp";
+			
+		}else if(userPath.equals("admin")){
+			userPath="customerMaintenance.jsp";
+		}
+		
+		
+		forward(userPath, request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/*private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		String userPath = request.getServletPath();
+		PrintWriter out=response.getWriter();
+		
+		request.getRequestDispatcher("pages/admin/customerMaintenance.jsp").forward(request, response);
+	}*/
+	
+	private void forward(String userPath,HttpServletRequest request, HttpServletResponse response){
+		try {
+            String url=folderPath+userPath; 
+			
+			request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+	}
+	
+	private String getURL(String url){
+		String[] requestURL=url.split("/");
+		
+		if(requestURL.length==3) return requestURL[2];
+		else return requestURL[3];
+	}
+
+}

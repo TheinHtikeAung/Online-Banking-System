@@ -1,0 +1,55 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>TransferInformation</title>
+</head>
+<body>
+
+<H1>Transfer Information</H1>
+<form method="post" action="${pageContext.request.contextPath }/transferInfoController">
+My Account Type:   
+<select id="accountType111" name="accountType111">
+<option value="" selected>-----select-----</option>
+<option value="checkingAccount">checkingAccount</option>
+<option value="savingAccount">savingAccount</option>
+</select>
+<br><br>Branch: 
+ <select id="branch" name ="branch">
+	<c:forEach items="${sessionScope.bankBranchName}" var="bball">
+		<option value="${bball.name }">${bball.name}</option>
+	</c:forEach>
+</select>
+<br>
+
+
+<%
+String st=request.getParameter("Account Type");
+if(st!=null){
+    out.println("You have selected: "+st);
+}
+%>
+
+Name: 
+<INPUT TYPE="TEXT" NAME="name">
+ <br><BR>
+From Account :
+<INPUT TYPE="TEXT" NAME="fromAcc">
+<br><br>To Account:	<INPUT TYPE="TEXT" NAME="toAcc"><BR><br>
+
+Email of account holder
+<INPUT TYPE="TEXT" NAME="email">
+<BR>
+<br>Amount:
+<INPUT TYPE="TEXT" NAME="amount">
+<br><BR>
+<INPUT TYPE="SUBMIT" value="Next">
+
+</FORM>
+
+
+</body>
+</html>

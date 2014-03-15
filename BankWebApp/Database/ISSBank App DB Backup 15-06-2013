@@ -1,0 +1,222 @@
+CREATE DATABASE  IF NOT EXISTS `team16` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `team16`;
+-- MySQL dump 10.13  Distrib 5.6.12, for Win64 (x86_64)
+--
+-- Host: localhost    Database: team16
+-- ------------------------------------------------------
+-- Server version	5.6.11-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bankaccount`
+--
+
+DROP TABLE IF EXISTS `bankaccount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bankaccount` (
+  `accountId` varchar(15) NOT NULL,
+  `PIN` int(6) DEFAULT NULL,
+  `BBID` varchar(15) DEFAULT NULL,
+  `accountType` varchar(45) DEFAULT NULL,
+  `balance` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`accountId`),
+  KEY `BBID_idx` (`BBID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bankaccount`
+--
+
+LOCK TABLES `bankaccount` WRITE;
+/*!40000 ALTER TABLE `bankaccount` DISABLE KEYS */;
+INSERT INTO `bankaccount` VALUES ('1111',111111,'67','Checking Account',110),('2222',222222,'12','Saving Account',190),('3333',333333,'20','Saving Account',500),('4444',444444,'3','Checking Account',100);
+/*!40000 ALTER TABLE `bankaccount` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bankaccountdetail`
+--
+
+DROP TABLE IF EXISTS `bankaccountdetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bankaccountdetail` (
+  `accountId` varchar(15) NOT NULL,
+  `nric` varchar(15) NOT NULL,
+  PRIMARY KEY (`accountId`,`nric`),
+  KEY `bankaccountdetail_ibfk_2` (`nric`),
+  CONSTRAINT `bankaccountdetail_ibfk_1` FOREIGN KEY (`accountId`) REFERENCES `bankaccount` (`accountId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `bankaccountdetail_ibfk_2` FOREIGN KEY (`nric`) REFERENCES `customer` (`nric`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bankaccountdetail`
+--
+
+LOCK TABLES `bankaccountdetail` WRITE;
+/*!40000 ALTER TABLE `bankaccountdetail` DISABLE KEYS */;
+INSERT INTO `bankaccountdetail` VALUES ('1111','G1111111K'),('2222','G1111111K'),('4444','G1111111K'),('1111','G2222222K'),('3333','G3333333K'),('4444','G4444444K');
+/*!40000 ALTER TABLE `bankaccountdetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bankbranch`
+--
+
+DROP TABLE IF EXISTS `bankbranch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bankbranch` (
+  `BBID` varchar(15) NOT NULL,
+  `location` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`BBID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bankbranch`
+--
+
+LOCK TABLES `bankbranch` WRITE;
+/*!40000 ALTER TABLE `bankbranch` DISABLE KEYS */;
+INSERT INTO `bankbranch` VALUES ('12','Dover Location','Dover','Dover Phone No'),('18','53 Ang Mo Kio Avenue 3 d','Ang Mo Kio','Tel: 1800-111 1111'),('20','BLK 450 Clementi Avenue 3','Clementi','Tel: 1800-111 1111 3'),('3','6 Shenton Way','Shenton Way Test','Tel: 1800-111 1111'),('67','Near little india','Little India','Tel - 9342323232');
+/*!40000 ALTER TABLE `bankbranch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `checkingaccount`
+--
+
+DROP TABLE IF EXISTS `checkingaccount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `checkingaccount` (
+  `accountId` varchar(15) NOT NULL,
+  `overDraftAmount` double DEFAULT NULL,
+  PRIMARY KEY (`accountId`),
+  CONSTRAINT `checkingaccount_ibfk_1` FOREIGN KEY (`accountId`) REFERENCES `bankaccount` (`accountId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `checkingaccount`
+--
+
+LOCK TABLES `checkingaccount` WRITE;
+/*!40000 ALTER TABLE `checkingaccount` DISABLE KEYS */;
+INSERT INTO `checkingaccount` VALUES ('1111',50),('4444',50);
+/*!40000 ALTER TABLE `checkingaccount` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `customer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customer` (
+  `nric` varchar(15) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `dateOfBirth` date DEFAULT NULL,
+  `nationality` varchar(45) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `userid` varchar(15) DEFAULT NULL,
+  `password` varchar(8) DEFAULT NULL,
+  `dateOfJoining` date DEFAULT NULL,
+  PRIMARY KEY (`nric`),
+  UNIQUE KEY `userid_UNIQUE` (`userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `customer`
+--
+
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES ('G1111111K','Thein Htike Aung','Blk 340, East scope, Singapore','1990-03-03','Burmese','Male','U111','111','2013-01-01'),('G2222222K','Ramya','Blk 200, Jurong East, Singapore','1985-09-09','Indian','Female','U222','222','2013-06-15'),('G3333333K','Karen Zhao','Blk 290, Dover, Singapore','1980-05-03','Chinese','Female','U333','333','2013-06-11'),('G4444444K','Sabai Aung','Blk 200, Habour Front, Singapore','1975-05-03','Singaporean','Female','U444','444','2013-06-11');
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `savingsaccount`
+--
+
+DROP TABLE IF EXISTS `savingsaccount`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `savingsaccount` (
+  `accountId` varchar(15) NOT NULL,
+  `minimumBalance` double DEFAULT NULL,
+  PRIMARY KEY (`accountId`),
+  CONSTRAINT `savingsaccount_ibfk_1` FOREIGN KEY (`accountId`) REFERENCES `bankaccount` (`accountId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `savingsaccount`
+--
+
+LOCK TABLES `savingsaccount` WRITE;
+/*!40000 ALTER TABLE `savingsaccount` DISABLE KEYS */;
+INSERT INTO `savingsaccount` VALUES ('2222',20),('3333',40);
+/*!40000 ALTER TABLE `savingsaccount` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transaction`
+--
+
+DROP TABLE IF EXISTS `transaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transaction` (
+  `transactionId` int(11) NOT NULL AUTO_INCREMENT,
+  `accountId` varchar(15) DEFAULT NULL,
+  `transactionType` varchar(45) DEFAULT NULL,
+  `transactionAmount` double DEFAULT NULL,
+  `depositToAccount` varchar(15) DEFAULT NULL,
+  `transactionTime` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`transactionId`),
+  KEY `accountId_idx` (`accountId`),
+  CONSTRAINT `accountId` FOREIGN KEY (`accountId`) REFERENCES `bankaccount` (`accountId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES `transaction` WRITE;
+/*!40000 ALTER TABLE `transaction` DISABLE KEYS */;
+INSERT INTO `transaction` VALUES (36,'1111','Withdraw',1050,'','2013-06-13 17:20:15'),(37,'1111','Deposit',100,'1111','2013-06-14 17:20:27'),(38,'1111','Fund Transfer',100,'2222','2013-06-14 17:21:50'),(39,'1111','Deposit',150,'1111','2013-06-14 17:26:02'),(40,'2222','Fund Transfer',10,'1111','2013-06-14 17:29:47');
+/*!40000 ALTER TABLE `transaction` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-06-15  1:34:48

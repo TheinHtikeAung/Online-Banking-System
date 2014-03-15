@@ -1,0 +1,11 @@
+package sg.com.issbank.dao;
+
+import sg.com.issbank.dto.SavingsAccount;
+
+public interface SavingsAccountDao {
+	public void deleteSavingAcc(String acc);
+	
+	public SavingsAccount findSavingAccount(String acc);
+
+	public void insertSavingAcc(String accountId, double minimumBalance);
+}

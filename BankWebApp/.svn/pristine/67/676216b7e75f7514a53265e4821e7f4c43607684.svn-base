@@ -1,0 +1,23 @@
+package sg.com.issbank.util;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Kitool{
+	public static Date parseDate(String date){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date d=null;
+		try {
+			d=format.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return d;
+	}
+	
+	public static java.sql.Date parseSQLDate(Date utilDate){
+		 return new java.sql.Date(utilDate.getTime());
+	}
+}

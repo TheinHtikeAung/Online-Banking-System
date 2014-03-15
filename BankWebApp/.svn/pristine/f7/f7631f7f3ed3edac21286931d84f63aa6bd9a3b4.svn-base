@@ -1,0 +1,121 @@
+package sg.com.issbank.dao.mysql;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import sg.com.issbank.dao.CheckingAccountDao;
+import sg.com.issbank.dto.CheckingAccount;
+import sg.com.issbank.dto.Customer;
+import sg.com.issbank.util.Kitool;
+
+public class CheckingAccountDaoImpl implements CheckingAccountDao {
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet rs = null;
+	PreparedStatement ps=null;
+	
+	String query,error;
+	
+	public void test(){
+	}
+	
+	@Override
+	public CheckingAccount findCheckingAccount(String acc) {
+		
+		query="select * from checkingaccount where accountId='"+acc+"'";
+		connection=MySQL.getConnection();
+		
+		CheckingAccount checkAcc=new CheckingAccount();
+		
+		try{
+			statement=connection.createStatement();
+			rs = statement.executeQuery(query);
+			
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"Executing select: " + query);
+			
+			while (rs.next()) {
+				checkAcc=new CheckingAccount(rs.getString(1), rs.getDouble(2));
+			}
+			
+		}catch(SQLException e){
+			error="Error in selecting Checking Account :" + e;
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, error);
+		}finally{
+			close();
+		}
+				
+		return checkAcc;
+	}
+
+	@Override
+	public void deleteCheckingAcc(String acc) {
+		query="delete from checkingaccount where accountId='"+acc+"'";
+		connection=MySQL.getConnection();
+		
+		try {
+			statement=connection.createStatement();
+			statement.executeUpdate(query);
+			
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"Deleting Checking account : " + query);
+			
+		}catch (SQLException e) {
+			error="Error in deleting Checking account :" + e;
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, error);
+		}finally{
+			close();
+		}
+	}
+	
+	@Override
+	public void insertCheckingAcc(String accountId, double overDraftAmount) {
+		connection=MySQL.getConnection();
+		query="insert into checkingaccount values (?,?)";
+		
+		try {
+			connection.setAutoCommit(false);
+			
+			ps=connection.prepareStatement(query);
+			
+			ps.setString(1, accountId);
+			ps.setDouble(2, overDraftAmount);
+			
+			ps.executeUpdate();
+			Logger.getLogger(getClass().getName()).log(Level.INFO,"Executing insert: " + query);
+			
+			connection.commit();
+			
+		} catch (SQLException e) {
+			error="Error in Insert Checking Account :" + e;
+			Logger.getLogger(getClass().getName()).log(Level.SEVERE, error);
+		}finally{
+			close();
+		}
+	}
+	
+	public void close(){
+		try {
+			if (rs!=null) {
+				rs.close();
+			}
+			
+			if(statement!=null){
+				statement.close();
+			}
+			
+			if(connection!=null) {
+				connection.close();
+			}
+			
+		} catch (Exception e) {
+			
+		}
+	}
+
+	
+
+}

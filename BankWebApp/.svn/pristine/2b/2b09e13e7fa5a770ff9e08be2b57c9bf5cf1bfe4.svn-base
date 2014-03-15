@@ -1,0 +1,76 @@
+package sg.com.issbank.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class FrontController
+ */
+@WebServlet(description = "For Web App FrontEnd", urlPatterns = { "/" })
+public class FrontController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	private static final String folderPath="/pages/client/";
+	private HttpSession session;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FrontController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		processRequest(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		processRequest(request, response);
+	}
+	
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		String userPath = request.getServletPath();
+		
+		PrintWriter out=response.getWriter();
+		out.print(userPath+"Testing");
+		
+		/*forward(userPath, request, response);*/
+	}
+	
+	private void forward(String userPath,HttpServletRequest request, HttpServletResponse response){
+		try {
+            String url=folderPath+userPath; 
+			
+			request.getRequestDispatcher(url).forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+	}
+	
+	private String getURL(String url){
+		String[] requestURL=url.split("/");
+		
+		if(requestURL.length==3){ 
+			return requestURL[2];
+		}
+		else{ 
+			return requestURL[3];
+		}
+	}
+}

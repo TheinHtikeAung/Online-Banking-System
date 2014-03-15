@@ -1,0 +1,83 @@
+package sg.com.issbank.dto;
+
+import java.math.BigDecimal;
+
+public class BankAccount {
+
+	protected String accountId;
+	protected int PIN;
+	protected String BBID;
+	protected String accountType;
+	protected BigDecimal balance;
+	
+	public BankAccount(){
+		
+	}
+	
+	public BankAccount(String accountId, int pIN, String bBID,
+			String accountType, BigDecimal balance) {
+		super();
+		this.accountId = accountId;
+		PIN = pIN;
+		BBID = bBID;
+		this.accountType = accountType;
+		this.balance = balance;
+	}
+	
+	public String getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	public int getPIN() {
+		return PIN;
+	}
+	public void setPIN(int pIN) {
+		PIN = pIN;
+	}
+	public String getBBID() {
+		return BBID;
+	}
+	public void setBBID(String bBID) {
+		BBID = bBID;
+	}
+	public String getAccountType() {
+		return accountType;
+	}
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+	public BigDecimal getBalance() {
+		return balance;
+	}
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+	
+	@Override
+	public String toString() {
+		return "BankAccount [accountId=" + accountId + ", PIN=" + PIN
+				+ ", BBID=" + BBID + ", accountType=" + accountType
+				+ ", balance=" + balance + "]";
+	}
+
+	public BankAccount(String accountId) {
+		super();
+		this.accountId = accountId;
+	}
+
+	public BankAccount(double balance) {
+		super();
+		this.balance=new BigDecimal(balance);
+	}
+
+	public String getAccountID() {
+		return accountId;
+	}
+	public void setAccountID(String accountID) {
+		this.accountId = accountID;
+	}
+	
+
+}

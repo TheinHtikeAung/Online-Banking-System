@@ -1,0 +1,100 @@
+title=ISS Bank
+title.admin=ISS Bank Admin Panel
+footer=Copyright © ISS Bank, 2013
+
+login.title=Login As : 
+logout=Log out
+
+menu1=Menu
+menu.transList=List Transaction
+menu.fundTransfer=Fund Transfer
+menu.viewBalance=View Balance
+menu.withdraw=Withdraw
+menu.deposit=Deposit
+
+menu.admin=Maintenance
+menu.customer=Customer
+menu.bankbranch=Bank Branch
+menu.bankaccount=Bank Account
+menu.transaction=Transaction History
+menu.change.account=Change Account
+title.transaction.enquiry=Transaction Enquiry
+title.transaction.pinChange=Pin Change
+title.transaction.updateAddress=Update Address
+
+menu.preferences=My Preferences
+menu.pinchange=PIN Change
+menu.updateaddress=Address Update
+
+admin.customerpanel=Customer Maintenance Panel
+admin.bankbranch=Bank Branch Panel
+admin.bankaccount=Bank Account Panel
+admin.trasaction=Transaction History Panel
+
+
+login=Login
+login.iBanking=ISS iBanking
+login.user=User ID : 
+login.password=Password :
+login.welcome=Welcome to ISS iBanking
+
+bank.storytitle=ISS Bank Story
+bank.story=ISS Bank Main Branch near Clementi on Singapore. Now we have 16 branches in Singapore. Founded by <b>Team16</b> on 16 May, 2013.</br></br></br>
+bank.readmore=Read More
+bank.aboutUs=About Us
+bank.find.branch=Find near bank branch
+bank.how.open.account=How to open account
+
+label.customer.add=Add new customer
+label.customer.nric=NRIC
+label.customer.userid=User ID
+label.customer.password=Password
+label.customer.name=Name
+label.customer.dob=Date of Birth
+label.customer.gender=Gender
+label.customer.address=Address
+label.customer.nationality=Nationality
+label.customer.join=Joined Date
+label.customer.format=(YYYY-MM-DD)
+
+label.bankbranch.add=Add new bank branch
+label.bankbranch.bbid=BBID
+label.bankbranch.location=Location
+label.bankbranch.name=Name
+label.bankbranch.description=Description
+label.bankAccount=Bank Account
+
+page.edit=Edit
+page.delete=Delete
+page.manage=Manage
+
+label.account.add=Add new Bank Account
+label.account.accountid=Account ID
+label.account.pin=PIN
+label.account.bbid=BBID
+label.account.accountType=Account Type
+label.account.balance=Balance
+label.account.checkAcc=Checking Account
+label.account.saveAcc=Saving Account
+label.account.joint=Joint Bank Account
+label.account.overdraft=Overdraft Amount
+label.account.minBalance=Minimum Balance
+
+label.transaction.transactionId=Transaction ID
+label.transaction.accountId=Account ID
+label.transaction.transactionType=Transaction Type
+label.transaction.transactionAmount=Transaction Amount
+label.transaction.depositToAccount=Deposit to Account
+label.transaction.transactionTime=Transaction Time
+
+
+label.transaction.type=Transaction Type
+label.transaction.amount=Amount
+label.transaction.depoistToAcc=Account Deposited
+label.transaction.time=Transaction Time
+
+label.accountManager.AccountDetail=Account Detail Info
+
+label.existing.PIN=Existing PIN
+label.new.PIN=New PIN
+label.reenter.PIN=Re-enter New PIN

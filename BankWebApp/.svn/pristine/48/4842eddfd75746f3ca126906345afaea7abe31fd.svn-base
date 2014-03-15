@@ -1,0 +1,19 @@
+package sg.com.issbank.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sg.com.issbank.dto.Customer;
+
+public interface CustomerDao {
+	public ArrayList<Customer> getCustomers();
+	
+	public void insertCustomer(Customer c);
+	
+	public void updateCustomer(Customer c);
+
+	
+
+	public ArrayList<Customer> getCustomersByIdPwd(String userId, String pwd)
+			throws SQLException;
+}

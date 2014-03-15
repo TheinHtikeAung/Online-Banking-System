@@ -1,0 +1,40 @@
+<%@ include file="layout/adminheader.jsp" %>
+<%@ include file="layout/adminmenu.jsp" %>			
+			
+			<div id="content-admin-main">
+			
+			<h1 id="admin-title"><fmt:message key="admin.customerpanel"/></h1>
+			
+			<c:url var="url" scope="page" value="/SetUpPage.jsp">
+			
+			</c:url>
+			
+			<a href="#"><fmt:message key="label.customer.add"/></a>
+			<br/><br/>
+			<table class="table-format">
+				<th>#</th>
+				<th><fmt:message key="label.customer.nric"/></th>
+				<th><fmt:message key="label.customer.name"/></th>
+				<th><fmt:message key="label.customer.dob"/></th>
+				<th><fmt:message key="label.customer.gender"/></th>
+				<th><fmt:message key="page.edit"/></th>
+				<th><fmt:message key="page.delete"/></th>
+				
+			<c:forEach var="c" items="${customers}" varStatus="status">
+				<tr class="${status.index%2==0?'even':'odd'}">
+					<td nowrap>${status.index + 1}</td>
+					<td nowrap>${c.nric}</td>
+					<td nowrap>Testing row</td>
+					<td nowrap>Testing row</td>
+					<td nowrap>Testing row</td>
+					<td nowrap><fmt:message key="page.edit"/></td>
+					<td nowrap><fmt:message key="page.delete"/></td>
+				</tr>
+			</c:forEach>
+			
+			</table>
+			</div>
+			
+		</div>
+		
+<%@ include file="layout/footer.jsp" %>

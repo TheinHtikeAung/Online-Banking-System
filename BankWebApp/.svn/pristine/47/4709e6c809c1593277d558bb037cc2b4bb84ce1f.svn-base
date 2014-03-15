@@ -1,0 +1,76 @@
+package sg.com.issbank.biz;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import sg.com.issbank.dao.BankAccountDao;
+import sg.com.issbank.dao.CustomerDao;
+import sg.com.issbank.dao.DaoFactory;
+import sg.com.issbank.dao.TransactionDao;
+import sg.com.issbank.dto.Customer;
+import sg.com.issbank.dto.Transaction;
+
+public class DepositManager {
+
+	public boolean DepositAmount(String userId, String pin, String amount) {
+		try {
+			// TODO Auto-generated method stub
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			Date date = new Date();
+			Date dateFormatted = dt.parse(dt.format(date));
+			Timestamp currentTimeStamp = new Timestamp(dateFormatted.getTime());
+			
+			double depositAmount=Double.parseDouble(amount);
+			CustomerDao customerDao=DaoFactory.getCustomerDao();
+			String accId=customerDao.getCustomerAccountIdByUserID(userId, pin);
+			if (accId != null) {
+				BankAccountDao bankDao = DaoFactory.getbankaccountDAO();
+				bankDao.deposit(accId, depositAmount);
+				TransactionDao transactionDao=DaoFactory.getTransactionDao();
+				Transaction transaction=new Transaction(12,accId,"deposit",depositAmount,accId, currentTimeStamp);
+				transactionDao.insertTransaction(transaction);
+				return true;
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean DepositAmountByAccountId(String accountId, String PIN,String amount) {
+		try {
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			Date date = new Date();
+			Date dateFormatted = dt.parse(dt.format(date));
+			Timestamp currentTimeStamp = new Timestamp(dateFormatted.getTime());
+			
+			double depositAmount=Double.parseDouble(amount);
+			CustomerDao customerDao=DaoFactory.getCustomerDao();
+			boolean validate=customerDao.checkPIN(accountId, PIN);
+					
+			if(validate){
+				BankAccountDao bankDao = DaoFactory.getbankaccountDAO();
+				bankDao.deposit(accountId, depositAmount);
+				
+				TransactionDao transactionDao=DaoFactory.getTransactionDao();
+				Transaction transaction=new Transaction(12,accountId,"Deposit",depositAmount,accountId, currentTimeStamp);
+				transactionDao.insertTransaction(transaction);
+				return true;
+			}
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return false;
+	}
+
+}

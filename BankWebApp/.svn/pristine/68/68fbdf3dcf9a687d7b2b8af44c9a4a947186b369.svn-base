@@ -1,0 +1,22 @@
+
+package sg.com.issbank.dao;
+
+import sg.com.issbank.dao.mysql.BankAccountDaoImpl;
+import sg.com.issbank.dao.mysql.CustomerDaoImpl;
+import sg.com.issbank.dao.mysql.TransactionDaoImpl;
+
+public class DaoFactory {
+	public static TransactionDao getTransactionDao(){
+		return new TransactionDaoImpl();
+	}
+	public static BankAccountDao getbankaccountDAO()
+	{
+		return new BankAccountDaoImpl();
+	}
+	public static CustomerDao getCustomerDaoObject(){
+		return new CustomerDaoImpl();
+	}
+
+
+
+}

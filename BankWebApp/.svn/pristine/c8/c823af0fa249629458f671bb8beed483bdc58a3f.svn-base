@@ -1,0 +1,26 @@
+<%@ include file="layout/header.jsp" %>
+<%@ include file="layout/menu.jsp" %>
+
+ 		<div id="content-admin-main" align="center">
+ 		<form method="post" action="${pageContext.request.contextPath}/updateAddress">
+ 		
+ 		<h1 id="admin-title"><fmt:message key="title.transaction.updateAddress"/></h1>
+ 		 		
+			<table>
+				<tr>
+					<td><fmt:message key="label.customer.address"/> : </td>
+					<td>
+						<TEXTAREA NAME="address" ROWS=3 COLS=30 >${logincustomer.address}</TEXTAREA>
+					</td>
+				</tr>
+				<tr align="center">
+					<td colspan="2" align="center"><input name="action" class="button grey" type="submit" value="Update Address"/></td>
+				</tr>
+			</table>
+			
+			</form>
+		</div>
+		
+		</div>
+		
+<%@ include file="layout/footer.jsp" %>

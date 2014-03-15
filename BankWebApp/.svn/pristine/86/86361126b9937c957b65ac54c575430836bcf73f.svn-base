@@ -1,0 +1,93 @@
+package sg.com.issbank.dto;
+
+public class BankAccount {
+	protected String accountId;
+	protected int PIN;
+	protected String BBID;
+	protected String accountType;
+	protected double balance;
+	
+	
+	public BankAccount(String accountId, String accountType, double balance) {
+		super();
+		this.accountId = accountId;
+		this.accountType = accountType;
+		this.balance = balance;
+	}
+
+
+	public String getAccountId() {
+		return accountId;
+	}
+
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+
+	public BankAccount() {
+		super();
+	}
+
+
+	public BankAccount(String accountID, int pIN, String bBID,
+			String accountType, double balance) {
+		super();
+		this.accountId = accountID;
+		PIN = pIN;
+		BBID = bBID;
+		this.accountType = accountType;
+		this.balance = balance;
+	}
+	
+	
+	public BankAccount(String accountId) {
+		super();
+		this.accountId = accountId;
+	}
+
+
+	@Override
+	public String toString() {
+		return "bankaccount [accountId=" + accountId + ", accountType="
+				+ accountType + ", balance=" + balance + "]";
+	}
+
+
+	public BankAccount(double balance) {
+		super();
+		this.balance=balance;
+	}
+
+	public String getAccountID() {
+		return accountId;
+	}
+	public void setAccountID(String accountID) {
+		this.accountId = accountID;
+	}
+	public int getPIN() {
+		return PIN;
+	}
+	public void setPIN(int pIN) {
+		PIN = pIN;
+	}
+	public String getBBID() {
+		return BBID;
+	}
+	public void setBBID(String bBID) {
+		BBID = bBID;
+	}
+	public String getAccountType() {
+		return accountType;
+	}
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+}

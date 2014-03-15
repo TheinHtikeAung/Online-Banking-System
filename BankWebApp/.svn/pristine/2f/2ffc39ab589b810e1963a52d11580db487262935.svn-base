@@ -1,0 +1,105 @@
+package sg.com.issbank.dao.mysql;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sg.com.issbank.dto.BankAccount;
+import sg.com.issbank.dao.BankAccountDao;
+
+public class BankAccountDaoImpl implements BankAccountDao {
+	private static final String url="jdbc:mysql://localhost:3306/team16";
+	private static final String username="root";
+	private static final String password="root";
+	
+	Connection conn;
+	PreparedStatement ppst=null;
+	
+	public BankAccount getBalancebyAccID(String accountId) throws SQLException
+	{
+		openconnection();
+		BankAccount ba = new BankAccount();
+		String sql="SELECT * FROM bankaccount WHERE accountId=?;";
+		
+		ppst=conn.prepareStatement(sql);
+		ppst.setString(1, accountId);
+		ResultSet rs=ppst.executeQuery();
+		while(rs.next()){
+			ba.setAccountID(rs.getString("accountId"));
+			ba.setAccountType(rs.getString("accountType"));
+			ba.setBalance(rs.getDouble("balance"));
+			}
+		closeconnection();
+		ppst.close();
+		return ba;
+	}
+	
+	public ArrayList<BankAccount> findaccountbyCustID(String nric) throws SQLException {
+		ArrayList<BankAccount> AccList=new ArrayList<BankAccount>();
+					openconnection();
+					
+			String sql="SELECT b.accountId,b.accountType,b.balance " +
+					"FROM team16.bankaccount as b WHERE b.accountId IN" +
+					"(SELECT bd.accountId FROM team16.bankaccountdetail as bd WHERE bd.nric IN " +
+					"(SELECT c.nric FROM team16.customer as C WHERE c.nric=?));";
+			ppst=conn.prepareStatement(sql);
+			ppst.setString(1, nric);
+			ResultSet rs=ppst.executeQuery();
+			while(rs.next())
+			{
+				BankAccount ba= new BankAccount(rs.getString("accountId"),rs.getString("accountType"),rs.getDouble("balance"));
+				AccList.add(ba);
+			}
+			closeconnection();
+			return AccList;	
+	}
+	
+	public boolean successfulPIN() throws SQLException
+	{
+		return false;
+	}
+
+	public void openconnection()
+	{
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+		conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/team16","root","root");
+		}catch(SQLException e)
+		{	
+			e.printStackTrace();
+		}
+	}
+	
+	private void closeconnection() throws SQLException
+	{
+		conn.close();
+	}
+
+	@Override
+	public boolean deposit(String accId, double amount) {
+		openconnection();
+		try {
+			ppst=conn.prepareStatement("update bankaccount set balance=balance+? where accountId=?");
+			ppst.setDouble(1, amount);
+			ppst.setString(2, accId);
+			int update=ppst.executeUpdate();
+			if(update>0){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+
+}

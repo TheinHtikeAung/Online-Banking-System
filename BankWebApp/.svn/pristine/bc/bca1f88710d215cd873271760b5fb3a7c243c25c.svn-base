@@ -1,0 +1,5 @@
+package sg.com.issbank.dao;
+
+public interface BankBranchDao {
+
+}

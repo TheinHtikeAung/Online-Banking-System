@@ -1,0 +1,106 @@
+package sg.com.issbank.controller;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import sg.com.issbank.exception.OverDraftLimitExceededException;
+
+import javax.servlet.RequestDispatcher;
+
+import sg.com.issbank.biz.CustomerManager;
+import sg.com.issbank.dao.mysql.CustomerDaoImpl;
+import sg.com.issbank.dao.mysql.MySQL;
+import sg.com.issbank.dto.BankAccountDetail;
+import sg.com.issbank.dto.Customer;
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+
+	HttpSession session;
+    
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+
+
+	public LoginServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		session=request.getSession(true);
+		session.invalidate();
+		
+		response.sendRedirect("pages/client/index.jsp");
+		
+		/*throw new OverDraftLimitExceededException();*/
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String path = "";
+		// boolean result = false;
+		String name = request.getParameter("id");
+		String password = request.getParameter("pwd");
+		CustomerManager mgr = new CustomerManager();
+		// PrintWriter out=response.getWriter();
+		Customer c = new Customer();
+		// System.out.println(c);
+		System.out.println("************1111**************");
+		c = mgr.getCustomerById(name, password);
+		System.out.println("*************2222*************");
+		System.out.println(c);
+		ArrayList<BankAccountDetail> aidlist = new ArrayList<BankAccountDetail>();
+
+		try {
+			aidlist = new CustomerDaoImpl().getAccountDetailByCustomerID(c
+					.getNric());
+			System.out.println("aidlist.size()==" + aidlist.size());
+
+			if (c.getUserid() != null && c.getPassword() != null
+					&& aidlist.size() >= 2) {
+				System.out.println("******>2******");
+				path = "/Accountselect.jsp";
+				System.out.println("******path******");
+				request.getSession().setAttribute("aidlist", aidlist);
+				request.getSession().setAttribute("c", c);
+			} else if (c.getUserid() != null && c.getPassword() != null
+					&& aidlist.size() < 2) {
+				path = "/home.jsp";
+				request.getSession().setAttribute("c", c);
+
+			} else {
+				path = "/Login.jsp";
+				request.setAttribute("message",
+						"invalid user name and password");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher(path);
+		rd.forward(request, response);
+
+	}
+
+}

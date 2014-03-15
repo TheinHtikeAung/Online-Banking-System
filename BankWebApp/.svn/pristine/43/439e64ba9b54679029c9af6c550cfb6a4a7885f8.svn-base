@@ -1,0 +1,26 @@
+package sg.com.issbank.dto;
+
+public class SavingsAccount extends BankAccount {
+	protected double minimumbalance;
+	public String getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	public double getBalance() {
+		return minimumbalance;
+	}
+	public void setBalance(double balance) {
+		this.minimumbalance = balance;
+	}
+	public SavingsAccount(String accountId, double balance) {
+		super(accountId);
+		this.minimumbalance = balance;
+	}
+	
+	
+
+
+
+}

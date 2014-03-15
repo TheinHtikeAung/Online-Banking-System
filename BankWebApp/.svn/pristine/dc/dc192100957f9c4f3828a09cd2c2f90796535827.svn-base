@@ -1,0 +1,7 @@
+package sg.com.issbank.dao.mysql;
+
+import sg.com.issbank.dao.TransactionDao;
+
+public class TransactionDaoImpl implements TransactionDao {
+
+}

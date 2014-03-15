@@ -1,0 +1,16 @@
+package sg.com.issbank.dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sg.com.issbank.dto.BankAccount;
+
+
+public interface BankAccountDao {
+	public ArrayList<BankAccount> findaccountbyCustID(String nric) throws SQLException; 
+	public BankAccount getBalancebyAccID(String accountId) throws SQLException;
+	
+	public boolean deposit(String accId, double amount);
+	public void openconnection();
+
+}

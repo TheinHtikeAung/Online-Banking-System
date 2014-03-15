@@ -1,0 +1,58 @@
+<%@ include file="layout/adminheader.jsp" %>
+<%@ include file="layout/adminmenu.jsp" %>
+
+			<div id="content-admin-main">
+			
+			<h1 id="admin-title"><fmt:message key="admin.bankaccount"/></h1>
+			
+			<c:if test="${!empty error}">
+			<div style="padding-bottom:15px; padding-top:15px; padding-left:45px; padding-right:15px; float:none;display: block;" class="error">${error}</div>
+			</c:if>
+			
+			<form action="./jointProcess" method=post>
+			<table border="0" class="center-table">
+				<tr>
+					<td><fmt:message key="label.account.accountid"/> : </td>
+					<td>
+							<input type="text" name="accountId" value="${account.accountId}" size=15 maxlength=20>
+							<input name="action" class="button grey" type="submit" value="check"/>
+					</td>
+				</tr>
+
+				<tr>
+					<td><fmt:message key="label.account.accountType"/> : </td>
+					<td>${account.accountType}</td>
+				</tr>
+    			
+				<tr>
+					<td><fmt:message key="label.account.balance"/> : </td>
+					<td>${account.balance}</td>
+				</tr>
+				<tr>
+					<td><fmt:message key="label.account.bbid"/> : </td>
+					<td>
+						<c:if test="${!empty bb.name}" >
+						${bb.name} (${bb.BBID})
+						</c:if>
+					</td>
+					
+					<%-- <td><input type="text" name="BBID" value="${param['BBID']}" size=15 maxlength=20></td> --%>
+					
+				</tr>
+				
+				<tr>
+					<td align="center" colspan="2">
+						<input class="button pink" name="action" class="button grey" type="submit" value="Joint Account"> 
+					</td>
+				</tr>
+				
+			</table>
+			</form>
+			
+			</div>
+
+			</div>
+			
+		
+		
+<%@ include file="layout/footer.jsp" %>
